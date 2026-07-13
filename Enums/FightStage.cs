@@ -1,9 +1,11 @@
-﻿namespace PerfectheartMod.Enums {
-    public enum FightStage {
+﻿namespace PerfectheartMod.Enums
+{
+    public enum FightStage
+    {
         Nil,
         GracefullyFloatingDown,
         WaitingForFight,
         FightStarting,
-        PhaseOne
+        Hover,
     }
 }
