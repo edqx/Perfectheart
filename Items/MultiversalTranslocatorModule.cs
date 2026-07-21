@@ -1,10 +1,10 @@
 using System;
-using PerfectheartMod.NPCs;
+using Perfectheart.NPCs;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace PerfectheartMod.Items
+namespace Perfectheart.Items
 {
 	public class MultiversalTranslocatorModule : ModItem
 	{
@@ -18,7 +18,7 @@ namespace PerfectheartMod.Items
 
         public override void AddRecipes()
 		{
-			Recipe recipe = CreateRecipe()
+			var recipe = CreateRecipe()
 				.AddIngredient(ItemID.DirtBlock, 10)
 				.AddTile(TileID.WorkBenches)
 				.Register();

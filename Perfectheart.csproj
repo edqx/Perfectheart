@@ -2,10 +2,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\tModLoader.targets" />
   <PropertyGroup>
-    <AssemblyName>perfectheart</AssemblyName>
     <TargetFramework>net6.0</TargetFramework>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>latest</LangVersion>
+    <PackageId>Perfectheart</PackageId>
+    <RootNamespace>perfectheart</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />

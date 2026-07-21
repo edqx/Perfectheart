@@ -1,4 +1,4 @@
-﻿namespace PerfectheartMod.Enums
+﻿namespace Perfectheart.Enums
 {
     public enum FightStage
     {

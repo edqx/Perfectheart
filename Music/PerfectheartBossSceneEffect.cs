@@ -1,10 +1,10 @@
 ﻿using System;
 using PerfectheadMod.System;
-using PerfectheartMod.Enums;
+using Perfectheart.Enums;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace PerfectheartMod {
+namespace Perfectheart {
 
     public class PerfectheartBossSceneEffect : ModSceneEffect
     {

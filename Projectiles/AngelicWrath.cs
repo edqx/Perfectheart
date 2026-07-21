@@ -1,13 +1,13 @@
 using Microsoft.Xna.Framework;
-using PerfectheartMod.NPCs;
+using Perfectheart.NPCs;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace PerfectheartMod.Projectiles
+namespace Perfectheart.Projectiles
 {
 	public class AngelicWrath : SpawnBeam
 	{
-        public override string Texture => "PerfectheartMod/Projectiles/SpawnBeam";
+        public override string Texture => "Perfectheart/Projectiles/SpawnBeam";
 
 		public override void SetDefaults() {
             base.SetDefaults();

@@ -1,5 +1,5 @@
 ﻿using System;
-using PerfectheartMod.Enums;
+using Perfectheart.Enums;
 using Terraria.ModLoader;
 
 namespace PerfectheadMod.System {

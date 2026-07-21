@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using PerfectheadMod.System;
-using PerfectheartMod.Enums;
-using PerfectheartMod.Projectiles;
+using Perfectheart.Enums;
+using Perfectheart.Projectiles;
 using Terraria;
 using Terraria.Chat;
 using Terraria.DataStructures;
@@ -12,18 +12,18 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace PerfectheartMod.NPCs
+namespace Perfectheart.NPCs
 {
     public class PerfectheartBoss : ModNPC
     {
         public int NumFightAttempts = 0;
-        public float ascendVelocity = 0f;
+        public float AscendVelocity = 0f;
 
-        public float gracefullyFloatDownStartY = 0f;
-        public uint gracefullyFloatDownFrame;
+        public float GracefullyFloatDownStartY = 0f;
+        public uint GracefullyFloatDownFrame;
 
-        public float angelicWrathMidpointX = 0f;
-        public bool isAngelicWrathActive = false;
+        public float AngelicWrathMidpointX = 0f;
+        public bool IsAngelicWrathActive = false;
 
         public override void SetStaticDefaults()
         {
@@ -64,16 +64,13 @@ namespace PerfectheartMod.NPCs
 
         public string GetChatForFightAttempt()
         {
-            switch (NumFightAttempts)
+            return NumFightAttempts switch
             {
-                case 1:
-                    return Language.GetTextValue("Mods.PerfectheartMod.Dialogue.FightAttempt1");
-                case 2:
-                    return Language.GetTextValue("Mods.PerfectheartMod.Dialogue.FightAttempt2");
-                case 3:
-                    return Language.GetTextValue("Mods.PerfectheartMod.Dialogue.FightAttempt3");
-            }
-            return "";
+                1 => Language.GetTextValue("Mods.PerfectheartMod.Dialogue.FightAttempt1"),
+                2 => Language.GetTextValue("Mods.PerfectheartMod.Dialogue.FightAttempt2"),
+                3 => Language.GetTextValue("Mods.PerfectheartMod.Dialogue.FightAttempt3"),
+                _ => ""
+            };
         }
 
         public override void SetChatButtons(ref string button, ref string button2)
@@ -89,7 +86,7 @@ namespace PerfectheartMod.NPCs
             }
         }
 
-        void OnFightButtonClicked()
+        private void OnFightButtonClicked()
         {
             if (FightAttempt())
             {
@@ -103,7 +100,7 @@ namespace PerfectheartMod.NPCs
             }
         }
 
-        bool FightAttempt()
+        private bool FightAttempt()
         {
             if (NumFightAttempts < 3)
             {
@@ -116,15 +113,16 @@ namespace PerfectheartMod.NPCs
             }
         }
 
-        void StartFight()
+        private void StartFight()
         {
-            if (Main.netMode == NetmodeID.Server)
+            switch (Main.netMode)
             {
-                ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Mods.PerfectheartMod.Dialogue.FightBegin"), Microsoft.Xna.Framework.Color.Pink);
-            }
-            else if (Main.netMode == NetmodeID.SinglePlayer)
-            {
-                Main.NewText(Language.GetTextValue("Mods.PerfectheartMod.Dialogue.FightBegin"), Microsoft.Xna.Framework.Color.Pink);
+                case NetmodeID.Server:
+                    ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Mods.PerfectheartMod.Dialogue.FightBegin"), Color.Pink);
+                    break;
+                case NetmodeID.SinglePlayer:
+                    Main.NewText(Language.GetTextValue("Mods.PerfectheartMod.Dialogue.FightBegin"), Color.Pink);
+                    break;
             }
             PerfectheartBossSystem.BossStage = FightStage.FightStarting;
             Entity.boss = true;
@@ -133,7 +131,7 @@ namespace PerfectheartMod.NPCs
         public override void OnKill()
         {
             PerfectheartBossSystem.BossStage = FightStage.Nil;
-            foreach (Projectile proj in Main.projectile)
+            foreach (var proj in Main.projectile)
             {
                 if (proj.type == ModContent.ProjectileType<AngelicWrath>())
                 {
@@ -144,23 +142,23 @@ namespace PerfectheartMod.NPCs
 
         public override void OnSpawn(IEntitySource source)
         {
-            gracefullyFloatDownStartY = Entity.position.Y;
-            gracefullyFloatDownFrame = Main.GameUpdateCount;
+            GracefullyFloatDownStartY = Entity.position.Y;
+            GracefullyFloatDownFrame = Main.GameUpdateCount;
             PerfectheartBossSystem.BossStage = FightStage.GracefullyFloatingDown;
         }
 
-        bool CallAngelicWrath()
+        private bool CallAngelicWrath()
         {
-            if (isAngelicWrathActive) return false;
+            if (IsAngelicWrathActive) return false;
 
-            isAngelicWrathActive = true;
+            IsAngelicWrathActive = true;
             float k = 0;
-            angelicWrathMidpointX = Entity.position.X;
+            AngelicWrathMidpointX = Entity.position.X;
             while (k < Main.maxTilesY)
             {
                 Projectile.NewProjectileDirect(
                     NPC.GetSource_FromThis(),
-                    new Vector2(angelicWrathMidpointX, 0f) + new Vector2(-100, k).ToWorldCoordinates(),
+                    new Vector2(AngelicWrathMidpointX, 0f) + new Vector2(-100, k).ToWorldCoordinates(),
                     Vector2.Zero,
                     ModContent.ProjectileType<AngelicWrath>(),
                     0,
@@ -170,7 +168,7 @@ namespace PerfectheartMod.NPCs
                 );
                 Projectile.NewProjectileDirect(
                     NPC.GetSource_FromThis(),
-                    new Vector2(angelicWrathMidpointX, 0f) + new Vector2(100, k).ToWorldCoordinates(),
+                    new Vector2(AngelicWrathMidpointX, 0f) + new Vector2(100, k).ToWorldCoordinates(),
                     Vector2.Zero,
                     ModContent.ProjectileType<AngelicWrath>(),
                     0,
@@ -190,7 +188,7 @@ namespace PerfectheartMod.NPCs
                 Entity.TargetClosest();
             }
 
-            if (isAngelicWrathActive)
+            if (IsAngelicWrathActive)
             {
                 AngelicWrathAnnihilate();
             }
@@ -207,116 +205,113 @@ namespace PerfectheartMod.NPCs
                 case FightStage.Nil:
                     break;
                 case FightStage.GracefullyFloatingDown:
-                    AIFloatingDown();
+                    AiFloatingDown();
                     break;
                 case FightStage.FightStarting:
-                    AIStartingFight();
+                    AiStartingFight();
                     break;
                 case FightStage.Hover:
-                    AIHover();
+                    AiHover();
                     break;
+                case FightStage.WaitingForFight:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
-        float GetEntityMidpoint()
+        private float GetEntityMidpoint()
         {
-            return Entity.position.X + (90 / 4);
+            return Entity.position.X + 22f;
         }
 
-        Player FindNearestPlayer()
+        private Player FindNearestPlayer()
         {
-            float entityMidPoint = GetEntityMidpoint();
+            var entityMidPoint = GetEntityMidpoint();
 
             Player nearestPlayer = null;
-            float nearestPlayerDistX = 9999999f;
-            for (int i = 0; i < Main.player.Length; i++)
+            var nearestPlayerDistX = 9999999f;
+            foreach (var player in Main.player)
             {
-                Player player = Main.player[i];
-                if (player != null && !player.dead && player.active)
-                {
-                    float distX = MathF.Abs(player.position.X - entityMidPoint);
-                    if (distX < nearestPlayerDistX)
-                    {
-                        nearestPlayerDistX = distX;
-                        nearestPlayer = player;
-                    }
-                }
+                if (player == null || player.dead || !player.active) continue;
+                
+                var distX = MathF.Abs(player.position.X - entityMidPoint);
+                if (distX >= nearestPlayerDistX) continue;
+                
+                nearestPlayerDistX = distX;
+                nearestPlayer = player;
             }
             return nearestPlayer;
         }
 
-        void LookInDirectionOfPosition(float x)
+        private void LookInDirectionOfPosition(float x)
         {
-            float entityMidPoint = GetEntityMidpoint();
+            var entityMidPoint = GetEntityMidpoint();
             Entity.direction = x > entityMidPoint ? 1 : -1;
         }
 
-        void LookInDirectionOfPlayer(Player player)
+        private void LookInDirectionOfPlayer(Player player)
         {
             LookInDirectionOfPosition(player.position.X);
         }
 
-        void LookInDirectionOfNearestPlayer()
+        private void LookInDirectionOfNearestPlayer()
         {
-            Player nearestPlayer = FindNearestPlayer();
+            var nearestPlayer = FindNearestPlayer();
             if (nearestPlayer != null)
             {
                 LookInDirectionOfPlayer(nearestPlayer);
             }
         }
 
-        void AngelicWrathAnnihilate()
+        private void AngelicWrathAnnihilate()
         {
-            float min = angelicWrathMidpointX - 100 * 16;
-            float max = angelicWrathMidpointX + 100 * 16;
+            var min = AngelicWrathMidpointX - 100 * 16;
+            var max = AngelicWrathMidpointX + 100 * 16;
 
-            for (int i = 0; i < Main.player.Length; i++)
+            foreach (var player in Main.player)
             {
-                Player player = Main.player[i];
-                if (player != null && player.active && !player.dead)
+                if (player == null || !player.active || player.dead) continue;
+                
+                Mod.Logger.DebugFormat("Position: {0} {1}", player.position.X, AngelicWrathMidpointX);
+                if (player.position.X <= min || player.position.X >= max)
                 {
-                    Mod.Logger.DebugFormat("Position: {0} {1}", player.position.X, angelicWrathMidpointX);
-                    if (player.position.X <= min || player.position.X >= max)
-                    {
-                        player.KillMe(PlayerDeathReason.ByNPC(Entity.whoAmI), 999999999, 0, false);
-                    }
+                    player.KillMe(PlayerDeathReason.ByNPC(Entity.whoAmI), 999999999, 0, false);
                 }
             }
         }
 
-        void AIFloatingDown()
+        private void AiFloatingDown()
         {
-            if (Main.GameUpdateCount - gracefullyFloatDownFrame < 120) return;
+            if (Main.GameUpdateCount - GracefullyFloatDownFrame < 120) return;
 
-            long diff = Main.GameUpdateCount - gracefullyFloatDownFrame - 120;
+            long diff = Main.GameUpdateCount - GracefullyFloatDownFrame - 120;
             if (diff > 180)
             {
                 PerfectheartBossSystem.BossStage = FightStage.WaitingForFight;
                 return;
             }
-            Entity.position.Y = gracefullyFloatDownStartY + diff / (float)180 * 7 * 16;
+            Entity.position.Y = GracefullyFloatDownStartY + diff / (float)180 * 7 * 16;
         }
 
-        void AIStartingFight()
+        private void AiStartingFight()
         {
-            Entity.position = Entity.position - new Vector2(0f, ascendVelocity);
+            Entity.position = Entity.position - new Vector2(0f, AscendVelocity);
             Entity.despawnEncouraged = false;
-            ascendVelocity += 0.4f;
-            if (ascendVelocity > 32f)
+            AscendVelocity += 0.4f;
+            if (AscendVelocity > 32f)
             {
-                ascendVelocity = 32f;
+                AscendVelocity = 32f;
             }
             // reached top of map
-            if (Entity.position.Y < 0)
-            {
-                Entity.friendly = false;
-                PerfectheartBossSystem.BossStage = FightStage.Hover;
-                CallAngelicWrath();
-            }
-            return;
+            if (Entity.position.Y >= 0) return;
+            
+            Entity.friendly = false;
+            PerfectheartBossSystem.BossStage = FightStage.Hover;
+            CallAngelicWrath();
         }
 
-        void AIHover()
+        private void AiHover()
         {
             Entity.position = Main.player[Entity.target].position + new Vector2(250f, -50f);
         }

@@ -3,9 +3,9 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace PerfectheartMod.Items
+namespace Perfectheart.Items
 {
-	class LargeTestTube : ModItem
+	internal class LargeTestTube : ModItem
 	{
 		public override void SetDefaults() {
 			Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.LargeTestTubeTile>());
