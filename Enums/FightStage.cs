@@ -3,9 +3,13 @@
     public enum FightStage
     {
         Nil,
+        
+        // fight inactive
         GracefullyFloatingDown,
         WaitingForFight,
-        FightStarting,
+        
+        // fight active
+        FlyUp,
         Hover,
     }
 }

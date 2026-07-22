@@ -23,13 +23,7 @@ float2 uZoom;
 float4 FilterSpawnFlash(float2 coords : TEXCOORD0) : COLOR0
 {
     float4 col = tex2D(uImage0, coords);
-    if (uProgress >= 1.0f) {
-        return col;
-    } else if (uProgress >= 0.5f) {
-        return lerp(col, float4(1.0f, 1.0f, 1.0f, 1.0f), (1.0f - uProgress) * 2.0f);
-    } else {
-        return lerp(col, float4(1.0f, 1.0f, 1.0f, 1.0f), uProgress * 2.0f);
-    }
+    return lerp(col, float4(1.0f, 1.0f, 1.0f, 1.0f), uProgress);
 }
 
 technique Technique1

@@ -3,7 +3,7 @@
 Mods: {
 	PerfectheartMod: {
 		Items: {
-			heart: {
+			Heart: {
 				DisplayName: heart
 				Tooltip: ""
 			}
@@ -43,6 +43,32 @@ Mods: {
 		Projectiles: {
 			SpawnBeam.DisplayName: Spawn Beam
 			AngelicWrath.DisplayName: Angelic Wrath
+		}
+	}
+
+	Perfectheart: {
+		Items: {
+			Heart: {
+				DisplayName: Heart
+				Tooltip: ""
+			}
+
+			LargeTestTube: {
+				DisplayName: Large Test Tube
+				Tooltip: ""
+			}
+
+			MultiversalTranslocatorModule: {
+				DisplayName: Multiversal Translocator Module
+				Tooltip: ""
+			}
+		}
+
+		NPCs.PerfectheartBoss.DisplayName: Perfectheart Boss
+
+		Projectiles: {
+			AngelicWrath.DisplayName: Angelic Wrath
+			SpawnBeam.DisplayName: Spawn Beam
 		}
 	}
 }

@@ -23,11 +23,5 @@ namespace Perfectheart.Items
 				.AddTile(TileID.WorkBenches)
 				.Register();
 		}
-
-        public override bool? UseItem(Player player)
-        {
-			NPC.SpawnBoss((int)player.position.X + 250, (int)player.position.Y - 40, ModContent.NPCType<PerfectheartBoss>(), Array.FindIndex(Main.player, x => x == player));
-            return true;
-        }
     }
 }

@@ -123,7 +123,8 @@ namespace Perfectheart.Tiles {
                 return true;
             }
 
-            if (Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem].type != MultiversalTranslocatorModuleType) return false;
+            if (Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem].type !=
+                MultiversalTranslocatorModuleType) return false;
             
             Main.LocalPlayer.ConsumeItem(MultiversalTranslocatorModuleType);
             SetAllTileFrameX(i, j, 90, 0);
@@ -193,9 +194,18 @@ namespace Perfectheart.Tiles {
                         var pt = new Point16(topX + 3, topY + 4).ToWorldCoordinates();
                         SoundEngine.PlaySound(SoundID.Item121);
                         SoundEngine.PlaySound(SoundID.Shatter);
-                        Projectile.NewProjectileDirect(WorldGen.GetItemSource_FromTileBreak(i, j), pt + new Vector2(10, 0), Vector2.Zero, ModContent.ProjectileType<SpawnBeam>(), 0, 0f, -1, 1f);
+                        var leader = Projectile.NewProjectileDirect(WorldGen.GetItemSource_FromTileBreak(i, j), pt + new Vector2(10, 0), Vector2.Zero, ModContent.ProjectileType<SpawnBeam>(), 0, 0f);
+                        if (leader.ModProjectile is SpawnBeam spawnBeam)
+                        {
+                            spawnBeam.IsLeader = true;
+                        }
+                        else
+                        {
+                            Mod.Logger.ErrorFormat("Created projectile for spawn beam, but ModProjectile was not of type SpawnBeam: {0}", leader.type);
+                        }
+                        
                         for (var k = 1; k < 15; k++) {
-                            Projectile.NewProjectileDirect(WorldGen.GetItemSource_FromTileBreak(i, j), pt + new Vector2(10, k * -100), Vector2.Zero, ModContent.ProjectileType<SpawnBeam>(), 0, 0f, -1, 0f);
+                            Projectile.NewProjectileDirect(WorldGen.GetItemSource_FromTileBreak(i, j), pt + new Vector2(10, k * -100), Vector2.Zero, ModContent.ProjectileType<SpawnBeam>(), 0, 0f);
                         }
                     }
                     else if (tile.TileFrameY <= 322)
